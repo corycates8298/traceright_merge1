@@ -1,0 +1,62 @@
+# Node modules
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Build artifacts
+dist
+.vite
+*.tsbuildinfo
+
+# Development files
+.git
+.github
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Test files
+coverage
+.nyc_output
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+
+# Documentation
+README.md
+todo.md
+*.md
+
+# Logs
+logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp
+temp
+*.tmp
+
+# Workflow files
+*.workflow
+traceright_merge1.workflow
+
+# VS Code extensions
+*.vsix
+github.vscode-pull-request-github-*.vsix
+
+# Backup files
+*.bak
+*.backup
