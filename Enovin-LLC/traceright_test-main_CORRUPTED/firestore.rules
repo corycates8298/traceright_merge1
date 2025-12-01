@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper function to check if the user belongs to the requested tenant
+    function isTenantMember(tenantId) {
+      return isAuthenticated() && 
+             exists(/databases/$(database)/documents/tenants/$(tenantId)/members/$(request.auth.uid));
+    }
+
+    // Helper function to check if the user has a specific role
+    function hasRole(tenantId, role) {
+      return isTenantMember(tenantId) &&
+             get(/databases/$(database)/documents/tenants/$(tenantId)/members/$(request.auth.uid)).data.role == role;
+    }
+
+    // Tenants Collection: Only system admins or the tenant owner can manage
+    match /tenants/{tenantId} {
+      allow read: if isTenantMember(tenantId);
+      allow write: if false; // Only via Admin SDK
+
+      // Subcollections for each tenant
+      match /{document=**} {
+        allow read, write: if isTenantMember(tenantId);
+      }
+    }
+
+    // Global deny for anything else to ensure strict multi-tenancy
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
